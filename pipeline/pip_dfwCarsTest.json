@@ -1,0 +1,32 @@
+{
+	"name": "pip_dfwCarsTest",
+	"properties": {
+		"activities": [
+			{
+				"name": "dfw_CarsTestAAA",
+				"type": "ExecuteWranglingDataflow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dfw_CarsTestAAA",
+						"type": "DataFlowReference"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "zmy00_Misc"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-09-24T12:24:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

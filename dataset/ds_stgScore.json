@@ -1,0 +1,20 @@
+{
+	"name": "ds_stgScore",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_sqldatabase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy01_IncLoad_SCD"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "zmy01_stg_score"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

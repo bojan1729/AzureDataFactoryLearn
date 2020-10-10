@@ -1,0 +1,30 @@
+{
+	"name": "test1_1_DestinationDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_storage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"DestinationFileName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "zmy02_CDR"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().DestinationFileName",
+					"type": "Expression"
+				},
+				"container": "zmy02-unzipped"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

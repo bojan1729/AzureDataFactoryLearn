@@ -1,0 +1,101 @@
+{
+	"name": "test_restapi2",
+	"properties": {
+		"activities": [
+			{
+				"name": "RESTAPI to SQLDB",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET"
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "['id']"
+								},
+								"sink": {
+									"name": "id",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "['employee_name']"
+								},
+								"sink": {
+									"name": "employee_name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['employee_salary']"
+								},
+								"sink": {
+									"name": "employee_salary",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "['employee_age']"
+								},
+								"sink": {
+									"name": "employee_age",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "['profile_image']"
+								},
+								"sink": {
+									"name": "profile_image",
+									"type": "String"
+								}
+							}
+						],
+						"collectionReference": "$['data']"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "test_restapi_source",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "test_restapi_sqldb",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "zmy02_CDR"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-10-02T15:57:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

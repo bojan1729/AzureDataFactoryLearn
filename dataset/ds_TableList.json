@@ -1,0 +1,16 @@
+{
+	"name": "ds_TableList",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_sqldatabase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy00_Misc"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,47 @@
+{
+	"name": "DS_cars_view",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_sqldatabase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy00_Misc"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Make",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Model",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Origin",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DriveTrain",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Length",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "cars_view"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

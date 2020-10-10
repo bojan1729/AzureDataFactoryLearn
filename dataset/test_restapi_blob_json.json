@@ -1,0 +1,22 @@
+{
+	"name": "test_restapi_blob_json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_storage",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy02_CDR"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "restapiexample.json",
+				"container": "zmy02-restapi"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

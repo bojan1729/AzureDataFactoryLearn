@@ -1,0 +1,87 @@
+{
+	"name": "df_LoadDimTeamType1_V2",
+	"properties": {
+		"description": "SCD Dim Type 1 - V2: source StageTable first removes duplicate business keys and just takes the last record",
+		"folder": {
+			"name": "zmy01_IncLoad_SCD"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_stgTeam",
+						"type": "DatasetReference"
+					},
+					"name": "StageTable"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dimTeam",
+						"type": "DatasetReference"
+					},
+					"name": "DimTable"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dimTeam",
+						"type": "DatasetReference"
+					},
+					"name": "MaxTeamKey"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_dimTeam",
+						"type": "DatasetReference"
+					},
+					"name": "InsertSink"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dimTeam",
+						"type": "DatasetReference"
+					},
+					"name": "UpdateSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DimTableRenameCols"
+				},
+				{
+					"name": "StageHash"
+				},
+				{
+					"name": "Exists"
+				},
+				{
+					"name": "Lookup"
+				},
+				{
+					"name": "ConditionalSplit"
+				},
+				{
+					"name": "JoinMax"
+				},
+				{
+					"name": "SurrogateKey"
+				},
+				{
+					"name": "InsertDerivedColumn"
+				},
+				{
+					"name": "AlterRowInsert"
+				},
+				{
+					"name": "UpdateDerivedColumn"
+				},
+				{
+					"name": "AlterRowUpdate"
+				}
+			],
+			"script": "source(output(\n\t\tTeamCode as string,\n\t\tLocation as string,\n\t\tNickName as string,\n\t\tConferenceCode as string,\n\t\tDivisionName as string,\n\t\tLastUpdateDate as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'SELECT dup.* \\nFROM\\n(\\n   SELECT ROW_NUMBER() OVER (PARTITION BY TeamCode ORDER BY LastUpdateDate desc) AS val\\n , stg.*\\n FROM zmy01_stg_team stg\\n) dup\\nWHERE dup.val = 1',\n\tformat: 'query') ~> StageTable\nsource(output(\n\t\tTeamKey as integer,\n\t\tTeamCode as string,\n\t\tRecordHash as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'SELECT TeamKey, TeamCode, RecordHash\\nFROM zmy01_dim_team',\n\tformat: 'query') ~> DimTable\nsource(output(\n\t\tMaxTeamKey as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'SELECT MaxTeamKey = ISNULL(MAX(TeamKey), 0)\\nFROM zmy01_dim_team',\n\tformat: 'query') ~> MaxTeamKey\nDimTable select(mapColumn(\n\t\tDimTeamKey = TeamKey,\n\t\tDimTeamCode = TeamCode,\n\t\tDimRecordHash = RecordHash\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DimTableRenameCols\nStageTable derive(StageRecordHash = sha2(256, TeamCode, Location, NickName, ConferenceCode, DivisionName)) ~> StageHash\nStageHash, DimTableRenameCols exists(StageRecordHash == DimRecordHash,\n\tnegate:true,\n\tbroadcast: 'auto')~> Exists\nExists, DimTableRenameCols lookup(TeamCode == DimTeamCode,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> Lookup\nLookup split(isNull(DimTeamKey),\n\tdisjoint: false) ~> ConditionalSplit@(NewItem, UpdatedItem)\nConditionalSplit@NewItem, MaxTeamKey join(1==1,\n\tjoinType:'cross',\n\tbroadcast: 'auto')~> JoinMax\nJoinMax keyGenerate(output(NewTeamKey as long),\n\tstartAt: 1L) ~> SurrogateKey\nSurrogateKey derive(NewTeamKey = NewTeamKey + MaxTeamKey,\n\t\tDWIsCurrent = 1,\n\t\tDWEffectiveEndDate = toDate('2100-01-01'),\n\t\tRecordCreateDate = currentUTC(),\n\t\tRecordUpdateDate = currentUTC()) ~> InsertDerivedColumn\nInsertDerivedColumn alterRow(insertIf(1==1)) ~> AlterRowInsert\nConditionalSplit@UpdatedItem derive(RecordUpdateDate = currentUTC()) ~> UpdateDerivedColumn\nUpdateDerivedColumn alterRow(updateIf(1==1)) ~> AlterRowUpdate\nAlterRowInsert sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tTeamCode,\n\t\tLocation,\n\t\tNickName,\n\t\tConferenceCode,\n\t\tDivisionName,\n\t\tRecordHash = StageRecordHash,\n\t\tTeamKey = NewTeamKey,\n\t\tDWIsCurrent,\n\t\tDWEffectiveStartDate = LastUpdateDate,\n\t\tDWEffectiveEndDate,\n\t\tRecordCreateDate,\n\t\tRecordUpdateDate\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> InsertSink\nAlterRowUpdate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['TeamKey'],\n\tformat: 'table',\n\tmapColumn(\n\t\tTeamCode,\n\t\tLocation,\n\t\tNickName,\n\t\tConferenceCode,\n\t\tDivisionName,\n\t\tRecordHash = StageRecordHash,\n\t\tTeamKey = DimTeamKey,\n\t\tRecordUpdateDate,\n\t\tDWEffectiveStartDate = LastUpdateDate\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> UpdateSink"
+		}
+	}
+}

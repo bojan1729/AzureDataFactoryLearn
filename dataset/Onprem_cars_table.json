@@ -1,0 +1,39 @@
+{
+	"name": "Onprem_cars_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Onpremsql",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy00_Misc"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Name",
+				"type": "varchar"
+			},
+			{
+				"name": "Model",
+				"type": "varchar"
+			},
+			{
+				"name": "Length",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Cars"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

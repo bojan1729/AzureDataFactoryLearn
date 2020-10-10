@@ -1,0 +1,58 @@
+{
+	"name": "DS_Db_FactSales2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_sqldatabase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "bidesign"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "SalesKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TransactionId",
+				"type": "varchar"
+			},
+			{
+				"name": "ProductKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CustomerKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "InsertTime",
+				"type": "datetime2",
+				"scale": 0
+			},
+			{
+				"name": "InsertUser",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LastUpdateTime",
+				"type": "datetime2",
+				"scale": 0
+			},
+			{
+				"name": "LastUpdateUser",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "FactSales2"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,27 @@
+{
+	"name": "test1_blob_event",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "test1_zip",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"PipeFileName": "@first(split(triggerBody().fileName,'.'))"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/zmy02-zipped/blobs/",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/efa5efce-52f7-4c29-b118-ae4dff4cac2a/resourceGroups/bajlec-datafactory/providers/Microsoft.Storage/storageAccounts/bajlecblob",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

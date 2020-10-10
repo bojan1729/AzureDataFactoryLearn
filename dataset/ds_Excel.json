@@ -1,0 +1,26 @@
+{
+	"name": "ds_Excel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_storage",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy00_Misc"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Cars",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "data.xlsx",
+				"container": "demo-excel"
+			},
+			"range": "",
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

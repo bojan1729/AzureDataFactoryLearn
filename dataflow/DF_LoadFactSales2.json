@@ -1,0 +1,55 @@
+{
+	"name": "DF_LoadFactSales2",
+	"properties": {
+		"folder": {
+			"name": "bidesign"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Db_Static",
+						"type": "DatasetReference"
+					},
+					"name": "StagingFact"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Db_Static",
+						"type": "DatasetReference"
+					},
+					"name": "DimCustomer"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Db_Static",
+						"type": "DatasetReference"
+					},
+					"name": "DimProduct"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Db_FactSales2",
+						"type": "DatasetReference"
+					},
+					"name": "LoadFactSales2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "GetCustomerKey"
+				},
+				{
+					"name": "GetProductKey"
+				},
+				{
+					"name": "DerivedColumn"
+				}
+			],
+			"script": "source(output(\n\t\ttransaction_id as string,\n\t\tproduct_id as string,\n\t\tcustomer_id as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'SELECT * FROM [staging].[Sales]',\n\tformat: 'query') ~> StagingFact\nsource(output(\n\t\tCustomerKey as integer,\n\t\tCustomerId as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'select CustomerKey, CustomerId from [dbo].[DimCustomer]',\n\tformat: 'query') ~> DimCustomer\nsource(output(\n\t\tProductKey as integer,\n\t\tProductId as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'select ProductKey, ProductId from [dbo].[DimProduct]',\n\tformat: 'query') ~> DimProduct\nStagingFact, DimCustomer join(customer_id == CustomerId,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> GetCustomerKey\nGetCustomerKey, DimProduct join(product_id == ProductId,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> GetProductKey\nGetProductKey derive(NewCustomerKey = iifNull(CustomerKey, -1, CustomerKey),\n\t\tNewProductKey = iifNull(ProductKey, -1, ProductKey)) ~> DerivedColumn\nDerivedColumn sink(input(\n\t\tSalesKey as integer,\n\t\tTransactionId as string,\n\t\tProductKey as integer,\n\t\tCustomerKey as integer,\n\t\tInsertTime as timestamp,\n\t\tInsertUser as string,\n\t\tLastUpdateTime as timestamp,\n\t\tLastUpdateUser as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tTransactionId = transaction_id,\n\t\tProductKey = NewProductKey,\n\t\tCustomerKey = NewCustomerKey\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> LoadFactSales2"
+		}
+	}
+}

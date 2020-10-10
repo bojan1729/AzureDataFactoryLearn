@@ -1,0 +1,79 @@
+{
+	"name": "test1_1_zip",
+	"properties": {
+		"activities": [
+			{
+				"name": "test1_1_ZipToUnzip",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": false,
+							"deleteFilesAfterCompletion": false
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings",
+							"compressionProperties": {
+								"type": "ZipDeflateReadSettings",
+								"preserveZipFileNameAsFolder": false
+							}
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "test1_1_SourceDataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"SourceFileName": {
+								"value": "@concat(pipeline().parameters.PipeFileName, '.zip')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "test1_1_DestinationDataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"DestinationFileName": {
+								"value": "@concat(pipeline().parameters.PipeFileName, '.txt')",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"PipeFileName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "zmy02_CDR"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-10-02T06:26:29Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

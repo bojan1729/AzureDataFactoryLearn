@@ -1,0 +1,16 @@
+{
+	"name": "Onpremsql",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=BAJLEC-T440P;initial catalog=Demo;user id=SA",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI4ZmFlMzEyYi1mMWM0LTQ1ZmEtODA1YS1jZDhhM2FlMDQ4OGQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "onprem",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

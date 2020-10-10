@@ -1,0 +1,30 @@
+{
+	"name": "test1_LogTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_sqldatabase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy02_CDR"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Fname",
+				"type": "varchar"
+			},
+			{
+				"name": "LastUpdateTime",
+				"type": "datetime2",
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "cdr",
+			"table": "LogTable"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

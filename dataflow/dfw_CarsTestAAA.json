@@ -1,0 +1,40 @@
+{
+	"name": "dfw_CarsTestAAA",
+	"properties": {
+		"type": "WranglingDataFlow",
+		"folder": {
+			"name": "zmy00_Misc"
+		},
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "ds_inputCars1",
+					"script": "",
+					"dataset": {
+						"referenceName": "ds_inputCars1",
+						"type": "DatasetReference"
+					}
+				},
+				{
+					"name": "ds_inputCars2",
+					"script": "",
+					"dataset": {
+						"referenceName": "ds_inputCars2",
+						"type": "DatasetReference"
+					}
+				}
+			],
+			"sinks": [
+				{
+					"name": "Sink1",
+					"dataset": {
+						"referenceName": "ds_outputCars",
+						"type": "DatasetReference"
+					},
+					"script": "sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['outputCars'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Sink1"
+				}
+			],
+			"script": "section Section1;\r\nshared ds_inputCars1 = let\r\n  AdfDoc = Web.Contents(\"https://bajlecblob.blob.core.windows.net/dfwinput/cars1.csv?sv=2018-03-28&sig=gfcAewXfINxxN69F76TZ2w4c0Xq6J71hMtKghe2KfYI%3D&spr=https&se=2020-09-25T12%3A57%3A57Z&srt=sco&ss=bf&sp=rwl\"),\r\n  Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]),\r\n  PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true])\r\nin\r\n  PromotedHeaders;\r\nshared ds_inputCars2 = let\r\n  AdfDoc = Web.Contents(\"https://bajlecblob.blob.core.windows.net/dfwinput/cars2.csv?sv=2018-03-28&sig=gfcAewXfINxxN69F76TZ2w4c0Xq6J71hMtKghe2KfYI%3D&spr=https&se=2020-09-25T12%3A57%3A57Z&srt=sco&ss=bf&sp=rwl\"),\r\n  Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]),\r\n  PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true])\r\nin\r\n  PromotedHeaders;\r\nshared UserQuery = let\r\n  Source = ds_inputCars1,\r\n  #\"Added custom\" = Table.AddColumn(Source, \"MakeModel\", each [Make] & \"-\" & [Model]),\r\n  #\"Changed column type\" = Table.TransformColumnTypes(#\"Added custom\", {{\"MakeModel\", type text}, {\"Length\", Int64.Type}}),\r\n  #\"Merged queries\" = Table.NestedJoin(#\"Changed column type\", {\"Make\"}, ds_inputCars2, {\"Make\"}, \"ds_inputCars2\", JoinKind.LeftOuter),\r\n  #\"Expanded ds_inputCars2\" = Table.ExpandTableColumn(#\"Merged queries\", \"ds_inputCars2\", {\"Origin\"}, {\"Origin\"})\r\nin\r\n  #\"Expanded ds_inputCars2\";\r\n"
+		}
+	}
+}

@@ -1,0 +1,27 @@
+{
+	"name": "test_restapi_source_param",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_restapi_example_param",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"ln_fname": {
+					"value": "@dataset().dssrc_fname",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"dssrc_fname": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "zmy02_CDR"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

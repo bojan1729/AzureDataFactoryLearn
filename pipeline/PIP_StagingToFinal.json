@@ -1,0 +1,86 @@
+{
+	"name": "PIP_StagingToFinal",
+	"properties": {
+		"activities": [
+			{
+				"name": "LoadDimCustomer",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[staging].[usp_LoadDimCustomer]"
+				},
+				"linkedServiceName": {
+					"referenceName": "lnk_sqldatabase",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "LoadDimProduct",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[staging].[usp_LoadDimProduct]"
+				},
+				"linkedServiceName": {
+					"referenceName": "lnk_sqldatabase",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "LoadFactSales",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "LoadDimCustomer",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "LoadDimProduct",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[staging].[usp_LoadFactSales]"
+				},
+				"linkedServiceName": {
+					"referenceName": "lnk_sqldatabase",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "bidesign"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-09-23T08:48:21Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

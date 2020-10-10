@@ -1,0 +1,133 @@
+{
+	"name": "DS_OutputSQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_sqldatabase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy03_bigfile"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "GroupCode",
+				"type": "varchar"
+			},
+			{
+				"name": "CorporateCode",
+				"type": "varchar"
+			},
+			{
+				"name": "AccountNo",
+				"type": "varchar"
+			},
+			{
+				"name": "AgreementNo",
+				"type": "varchar"
+			},
+			{
+				"name": "SubscriptionNumber",
+				"type": "varchar"
+			},
+			{
+				"name": "CostCentre",
+				"type": "varchar"
+			},
+			{
+				"name": "NetworkSerialNumber",
+				"type": "varchar"
+			},
+			{
+				"name": "Tariff",
+				"type": "varchar"
+			},
+			{
+				"name": "CallClass",
+				"type": "varchar"
+			},
+			{
+				"name": "CallClassDescription",
+				"type": "varchar"
+			},
+			{
+				"name": "CallLandingDate",
+				"type": "varchar"
+			},
+			{
+				"name": "Calldate",
+				"type": "varchar"
+			},
+			{
+				"name": "Calltime",
+				"type": "varchar"
+			},
+			{
+				"name": "BundledCall",
+				"type": "varchar"
+			},
+			{
+				"name": "SPBilledCallPrice",
+				"type": "varchar"
+			},
+			{
+				"name": "Service",
+				"type": "varchar"
+			},
+			{
+				"name": "PreBundleActualDuration",
+				"type": "varchar"
+			},
+			{
+				"name": "PreBundledSPValue",
+				"type": "varchar"
+			},
+			{
+				"name": "SPRetailCallPrice",
+				"type": "varchar"
+			},
+			{
+				"name": "DiscountValue",
+				"type": "varchar"
+			},
+			{
+				"name": "SCDCountryOfCallOrigin",
+				"type": "varchar"
+			},
+			{
+				"name": "SCDCallDirection",
+				"type": "varchar"
+			},
+			{
+				"name": "SCDNetworksCallIndicator",
+				"type": "varchar"
+			},
+			{
+				"name": "GPRSDestination",
+				"type": "varchar"
+			},
+			{
+				"name": "GPRSProductCode",
+				"type": "varchar"
+			},
+			{
+				"name": "UplinkVolume",
+				"type": "varchar"
+			},
+			{
+				"name": "DownlinkVolume",
+				"type": "varchar"
+			},
+			{
+				"name": "NumberOfContexts",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "zmy03_bigfile"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

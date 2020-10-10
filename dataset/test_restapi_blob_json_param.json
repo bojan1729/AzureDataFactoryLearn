@@ -1,0 +1,30 @@
+{
+	"name": "test_restapi_blob_json_param",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_storage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ds_fname": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "zmy02_CDR"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@concat(dataset().ds_fname, '.json')",
+					"type": "Expression"
+				},
+				"container": "zmy02-restapi"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

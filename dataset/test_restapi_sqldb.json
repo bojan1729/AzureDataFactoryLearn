@@ -1,0 +1,44 @@
+{
+	"name": "test_restapi_sqldb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_sqldatabase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy02_CDR"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "employee_name",
+				"type": "varchar"
+			},
+			{
+				"name": "employee_salary",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "employee_age",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "profile_image",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "cdr",
+			"table": "RestApiExample"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

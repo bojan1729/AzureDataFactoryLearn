@@ -1,0 +1,41 @@
+{
+	"name": "ds_factScore",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_sqldatabase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy01_IncLoad_SCD"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "TeamKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TeamCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Score",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LastUpdateDate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "zmy01_fact_score"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

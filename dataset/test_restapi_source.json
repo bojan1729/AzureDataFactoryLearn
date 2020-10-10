@@ -1,0 +1,16 @@
+{
+	"name": "test_restapi_source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_restapi_example",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy02_CDR"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

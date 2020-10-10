@@ -1,0 +1,388 @@
+{
+	"name": "pip_IncrementalLoad",
+	"properties": {
+		"description": "CFG table:\n\n-- TableName: table name to be loaded\n-- NaturalKey: for dim tables to de-duplicate records with same natural key and only leave latest record; for all other tables leave \"na\" (not any)  \n-- Source: could be region, lob, application, crm, erp, ... (entered through pipeline parameter)\n-- MaxLastUpdateDate: table last updated date \n-- Enabled: 1 - load, 0 - do not load\n-- LoadType: 1 - incremental, 0 - full",
+		"activities": [
+			{
+				"name": "Enabled",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select * from zmy01_stg_cfg where Enabled = 1",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_stg",
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": "dummy"
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Filter source",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "Enabled",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Enabled').output.value",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@equals(item().source, pipeline().parameters.Source)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Source iteration",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Filter source",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Filter source').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Inc - Full condition",
+							"type": "IfCondition",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@bool(equals(item().LoadType, 1))",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Full",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": {
+													"value": "select * from @{item().TableName}",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "AzureSqlSink",
+												"preCopyScript": {
+													"value": "truncate table @{replace(item().TableName, 'src', 'stg')}",
+													"type": "Expression"
+												},
+												"disableMetricsCollection": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_src",
+												"type": "DatasetReference"
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ds_stg",
+												"type": "DatasetReference",
+												"parameters": {
+													"TableName": {
+														"value": "@replace(item().TableName, 'src', 'stg')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Get max last update date from CFG",
+										"type": "Lookup",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": {
+													"value": "select MaxLastUpdateDate from zmy01_stg_cfg where TableName like '@{item().TableName}'",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "ds_stg",
+												"type": "DatasetReference",
+												"parameters": {
+													"TableName": "dummy"
+												}
+											}
+										}
+									},
+									{
+										"name": "Incremental",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Get max last update date from CFG",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": {
+													"value": "select * from @{item().TableName} \nwhere \nconvert(varchar(max), LastUpdateDate, 120) > \nconvert(varchar(max), substring(replace('@{activity('Get max last update date from CFG').output.firstRow.MaxLastUpdateDate}', 'T', ' '), 0, 20), 120)\n",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "AzureSqlSink"
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_src",
+												"type": "DatasetReference"
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ds_stg",
+												"type": "DatasetReference",
+												"parameters": {
+													"TableName": {
+														"value": "@replace(item().TableName, 'src', 'stg')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								]
+							}
+						},
+						{
+							"name": "Get max last update date from STG",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Dedup dim",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "select max(LastUpdateDate) as maxD from @{replace(item().TableName, 'src', 'stg')}",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ds_stg",
+									"type": "DatasetReference",
+									"parameters": {
+										"TableName": "dummy"
+									}
+								}
+							}
+						},
+						{
+							"name": "Update max last update date in CFG",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Get max last update date from STG",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "update zmy01_stg_cfg \nset MaxLastUpdateDate = '@{activity('Get max last update date from STG').output.firstRow.maxD}'\nwhere TableName like '@{item().TableName}'\n\nselect '1'",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ds_stg",
+									"type": "DatasetReference",
+									"parameters": {
+										"TableName": "dummy"
+									}
+								}
+							}
+						},
+						{
+							"name": "Dedup dim",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Inc - Full condition",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@bool(equals(item().NaturalKey, 'na'))",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Delete dup records",
+										"type": "Lookup",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": {
+													"value": "delete dup\nfrom\n(\n select row_number() over (partition by @{item().NaturalKey} order by LastUpdateDate desc) as val\n from @{replace(item().TableName, 'src', 'stg')}\n) dup\nwhere dup.val > 1\n\nselect '1'",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "ds_stg",
+												"type": "DatasetReference",
+												"parameters": {
+													"TableName": "dummy"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"Source": {
+				"type": "string",
+				"defaultValue": "UK"
+			}
+		},
+		"folder": {
+			"name": "zmy01_IncLoad_SCD"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-09-17T10:38:32Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

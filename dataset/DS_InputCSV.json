@@ -1,0 +1,140 @@
+{
+	"name": "DS_InputCSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_storage",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy03_bigfile"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "filesbig.csv",
+				"container": "zmy03-bigfile"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "GroupCode",
+				"type": "String"
+			},
+			{
+				"name": "CorporateCode",
+				"type": "String"
+			},
+			{
+				"name": "AccountNo",
+				"type": "String"
+			},
+			{
+				"name": "AgreementNo",
+				"type": "String"
+			},
+			{
+				"name": "SubscriptionNumber",
+				"type": "String"
+			},
+			{
+				"name": "CostCentre",
+				"type": "String"
+			},
+			{
+				"name": "NetworkSerialNumber",
+				"type": "String"
+			},
+			{
+				"name": "Tariff",
+				"type": "String"
+			},
+			{
+				"name": "Callclass",
+				"type": "String"
+			},
+			{
+				"name": "CallclassDescription",
+				"type": "String"
+			},
+			{
+				"name": "CallLandingdate",
+				"type": "String"
+			},
+			{
+				"name": "Calldate",
+				"type": "String"
+			},
+			{
+				"name": "Calltime",
+				"type": "String"
+			},
+			{
+				"name": "BundledCall",
+				"type": "String"
+			},
+			{
+				"name": "SPBilledCallPrice",
+				"type": "String"
+			},
+			{
+				"name": "Service",
+				"type": "String"
+			},
+			{
+				"name": "PreBundleActualDuration",
+				"type": "String"
+			},
+			{
+				"name": "PreBundledSPValue",
+				"type": "String"
+			},
+			{
+				"name": "SPRetailCallPrice",
+				"type": "String"
+			},
+			{
+				"name": "DiscountValue",
+				"type": "String"
+			},
+			{
+				"name": "SCDCountryofCallOrigin",
+				"type": "String"
+			},
+			{
+				"name": "SCDCallDirection",
+				"type": "String"
+			},
+			{
+				"name": "SCDNetworksCallIndicator",
+				"type": "String"
+			},
+			{
+				"name": "GPRSDestination",
+				"type": "String"
+			},
+			{
+				"name": "GPRSProductCode",
+				"type": "String"
+			},
+			{
+				"name": "UplinkVolume",
+				"type": "String"
+			},
+			{
+				"name": "DownlinkVolume",
+				"type": "String"
+			},
+			{
+				"name": "NumberofContexts",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

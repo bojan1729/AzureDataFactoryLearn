@@ -1,0 +1,36 @@
+{
+	"name": "pip_SCD2Team",
+	"properties": {
+		"activities": [
+			{
+				"name": "df_LoadDimTeamType2",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_LoadDimTeamType2_V2",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "zmy01_IncLoad_SCD"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-09-25T16:17:34Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,21 @@
+{
+	"name": "DS_test_tbl_to_json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_storage",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy00_Misc"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "test-output"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

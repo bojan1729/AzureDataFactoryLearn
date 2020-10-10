@@ -1,0 +1,400 @@
+{
+	"name": "Big File To SQL Table",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "GroupCode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "GroupCode",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CorporateCode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CorporateCode",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "AccountNo",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "AccountNo",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "AgreementNo",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "AgreementNo",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SubscriptionNumber",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SubscriptionNumber",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CostCentre",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CostCentre",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NetworkSerialNumber",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "NetworkSerialNumber",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Tariff",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Tariff",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Callclass",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CallClass",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CallclassDescription",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CallClassDescription",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CallLandingdate",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CallLandingDate",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Calldate",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Calldate",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Calltime",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Calltime",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "BundledCall",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "BundledCall",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SPBilledCallPrice",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SPBilledCallPrice",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Service",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Service",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PreBundleActualDuration",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PreBundleActualDuration",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PreBundledSPValue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PreBundledSPValue",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SPRetailCallPrice",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SPRetailCallPrice",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DiscountValue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DiscountValue",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SCDCountryofCallOrigin",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SCDCountryOfCallOrigin",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SCDCallDirection",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SCDCallDirection",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SCDNetworksCallIndicator",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SCDNetworksCallIndicator",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "GPRSDestination",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "GPRSDestination",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "GPRSProductCode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "GPRSProductCode",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "UplinkVolume",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "UplinkVolume",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DownlinkVolume",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DownlinkVolume",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NumberofContexts",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "NumberOfContexts",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_InputCSV",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_OutputSQL",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "zmy03_bigfile"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-10-06T20:39:17Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

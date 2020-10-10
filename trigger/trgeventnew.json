@@ -1,0 +1,27 @@
+{
+	"name": "trgeventnew",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Trg Pipeline",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"FileName": "@triggerBody().FileName"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/trginput/blobs/",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/efa5efce-52f7-4c29-b118-ae4dff4cac2a/resourceGroups/bajlec-datafactory/providers/Microsoft.Storage/storageAccounts/bajlecblob",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

@@ -1,0 +1,42 @@
+{
+	"name": "df_LoadFactScore",
+	"properties": {
+		"folder": {
+			"name": "zmy01_IncLoad_SCD"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_stgScore",
+						"type": "DatasetReference"
+					},
+					"name": "StagingScore"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dimTeam",
+						"type": "DatasetReference"
+					},
+					"name": "DimTeam"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_factScore",
+						"type": "DatasetReference"
+					},
+					"name": "FactScore"
+				}
+			],
+			"transformations": [
+				{
+					"name": "GetTeamKey"
+				}
+			],
+			"script": "source(output(\n\t\tTeamCode as string,\n\t\tScore as integer,\n\t\tLastUpdateDate as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> StagingScore\nsource(output(\n\t\tTeamKey as integer,\n\t\tTeamCode as string,\n\t\tDWEffectiveStartDate as timestamp,\n\t\tDWEffectiveEndDate as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'SELECT TeamKey, TeamCode, DWEffectiveStartDate, DWEffectiveEndDate FROM zmy01_dim_team',\n\tformat: 'query') ~> DimTeam\nStagingScore, DimTeam join(StagingScore@TeamCode == DimTeam@TeamCode\n\t&& LastUpdateDate >= DWEffectiveStartDate\n\t&& LastUpdateDate < DWEffectiveEndDate,\n\tjoinType:'left',\n\tbroadcast: 'both')~> GetTeamKey\nGetTeamKey sink(input(\n\t\tTeamKey as integer,\n\t\tTeamCode as string,\n\t\tScore as integer,\n\t\tLastUpdateDate as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tTeamKey,\n\t\tTeamCode = {StagingScore@TeamCode},\n\t\tScore,\n\t\tLastUpdateDate\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> FactScore"
+		}
+	}
+}

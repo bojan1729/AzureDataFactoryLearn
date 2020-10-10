@@ -1,0 +1,46 @@
+{
+	"name": "test1_FinalTableDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_sqldatabase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "zmy02_CDR"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Icao",
+				"type": "varchar"
+			},
+			{
+				"name": "Iata",
+				"type": "varchar"
+			},
+			{
+				"name": "Maker",
+				"type": "varchar"
+			},
+			{
+				"name": "Descr",
+				"type": "varchar"
+			},
+			{
+				"name": "Fname",
+				"type": "varchar"
+			},
+			{
+				"name": "LastUpdateTime",
+				"type": "datetime2",
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "cdr",
+			"table": "Planes"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
