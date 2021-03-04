@@ -1,0 +1,21 @@
+{
+	"name": "ds_sftp",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "testcreditsafe_sftp",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "testcreditsafe"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "SftpLocation",
+				"fileName": "AC04_R_20210205.rar",
+				"folderPath": "/UKLTD_R_20210205"
+			}
+		}
+	}
+}
