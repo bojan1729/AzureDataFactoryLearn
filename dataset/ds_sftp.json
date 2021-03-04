@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "SftpLocation",
-				"fileName": "AC04_R_20210205.rar",
+				"fileName": "AC01_R_20210205.rar",
 				"folderPath": "/UKLTD_R_20210205"
 			}
 		}
