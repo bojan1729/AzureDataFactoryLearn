@@ -53,7 +53,7 @@
 		"trgeventnew_properties_typeProperties_scope": {
 			"value": "/subscriptions/efa5efce-52f7-4c29-b118-ae4dff4cac2a/resourceGroups/bajlec-datafactory/providers/Microsoft.Storage/storageAccounts/bajlecblob"
 		},
-		"tr_tumbling_window2_properties_pipeline_parameters_p_window_end_date": {
+		"tr_tumbling_window3_properties_pipeline_parameters_p_window_end_date": {
 			"value": "@trigger().outputs.windowEndTime"
 		}
 	}
