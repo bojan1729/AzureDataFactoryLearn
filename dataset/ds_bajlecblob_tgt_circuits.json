@@ -1,0 +1,33 @@
+{
+	"name": "ds_bajlecblob_tgt_circuits",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Inputblob",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_window_end_date": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "tumblingwindow"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@formatDateTime(dataset().p_window_end_date, 'yyyy-MM-dd')",
+					"type": "Expression"
+				},
+				"container": "tumblingwindow"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
