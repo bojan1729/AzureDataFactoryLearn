@@ -1,5 +1,5 @@
 {
-	"name": "ds_bajlecblob_src_circuits",
+	"name": "ds_ablob_bajlecblob_src",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Inputblob",
