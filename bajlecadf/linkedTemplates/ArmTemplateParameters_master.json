@@ -1,0 +1,66 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "bajlecadf"
+		},
+		"Inputblob_connectionString": {
+			"value": ""
+		},
+		"LNK_DataLakeGen2_accountKey": {
+			"value": ""
+		},
+		"Onpremsql_connectionString": {
+			"value": ""
+		},
+		"Outputsql_connectionString": {
+			"value": ""
+		},
+		"lnk_sqldatabase_connectionString": {
+			"value": ""
+		},
+		"lnk_storage_connectionString": {
+			"value": ""
+		},
+		"testcreditsafe_sftp_password": {
+			"value": ""
+		},
+		"LNK_DataLakeGen2_properties_typeProperties_url": {
+			"value": "https://bajlecblob.dfs.core.windows.net"
+		},
+		"lnk_restapi_example_properties_typeProperties_url": {
+			"value": "http://dummy.restapiexample.com/api/v1/employees"
+		},
+		"lnk_restapi_example_param_properties_typeProperties_url": {
+			"value": "@{concat('http://dummy.restapiexample.com/api/v1/', linkedService().ln_fname)}"
+		},
+		"testcreditsafe_sftp_properties_typeProperties_host": {
+			"value": "mft.filegateway.creditsafe.com"
+		},
+		"testcreditsafe_sftp_properties_typeProperties_userName": {
+			"value": "101159964_ext"
+		},
+		"test1_blob_event_properties_test1_zip_parameters_PipeFileName": {
+			"value": "@first(split(triggerBody().fileName,'.'))"
+		},
+		"test1_blob_event_properties_typeProperties_scope": {
+			"value": "/subscriptions/efa5efce-52f7-4c29-b118-ae4dff4cac2a/resourceGroups/bajlec-datafactory/providers/Microsoft.Storage/storageAccounts/bajlecblob"
+		},
+		"trgeventnew_properties_Trg Pipeline_parameters_FileName": {
+			"value": "@triggerBody().FileName"
+		},
+		"trgeventnew_properties_typeProperties_scope": {
+			"value": "/subscriptions/efa5efce-52f7-4c29-b118-ae4dff4cac2a/resourceGroups/bajlec-datafactory/providers/Microsoft.Storage/storageAccounts/bajlecblob"
+		},
+		"tr_tumbling_window_properties_pipeline_parameters_p_window_end_date": {
+			"value": "@trigger().output.windowEndTime"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

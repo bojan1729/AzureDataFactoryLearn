@@ -1,0 +1,286 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "bajlecadf"
+		},
+		"test1_blob_event_properties_test1_zip_parameters_PipeFileName": {
+			"type": "string",
+			"defaultValue": "@first(split(triggerBody().fileName,'.'))"
+		},
+		"test1_blob_event_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/efa5efce-52f7-4c29-b118-ae4dff4cac2a/resourceGroups/bajlec-datafactory/providers/Microsoft.Storage/storageAccounts/bajlecblob"
+		},
+		"trgeventnew_properties_Trg Pipeline_parameters_FileName": {
+			"type": "string",
+			"defaultValue": "@triggerBody().FileName"
+		},
+		"trgeventnew_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/efa5efce-52f7-4c29-b118-ae4dff4cac2a/resourceGroups/bajlec-datafactory/providers/Microsoft.Storage/storageAccounts/bajlecblob"
+		},
+		"tr_tumbling_window_properties_pipeline_parameters_p_window_end_date": {
+			"type": "string",
+			"defaultValue": "@trigger().output.windowEndTime"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pip_SCD2Team_CloseDup')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "df_LoadDimTeamType2",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_LoadDimTeamType2",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"StageTable": {},
+									"DimTable": {},
+									"MaxTeamKey": {},
+									"InsertSink": {},
+									"UpdateSink": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "CloseDup",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "df_LoadDimTeamType2",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[zmy01_CloseDedup]"
+						},
+						"linkedServiceName": {
+							"referenceName": "lnk_sqldatabase",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "zmy01_IncLoad_SCD"
+				},
+				"annotations": [],
+				"lastPublishTime": "2020-09-25T13:13:32Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pip_SCD2Team_CloseDup_V2_1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "df_LoadDimTeamType2",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_LoadDimTeamType2_V2_1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"StageTable": {},
+									"DimTable": {},
+									"MaxTeamKey": {},
+									"InsertSink": {},
+									"UpdateSink": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "CloseDup2",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "df_LoadDimTeamType2",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[zmy01_CloseDedup2]"
+						},
+						"linkedServiceName": {
+							"referenceName": "lnk_sqldatabase",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "zmy01_IncLoad_SCD"
+				},
+				"annotations": [],
+				"lastPublishTime": "2020-09-26T08:07:59Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/test1_blob_event')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "test1_zip",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"PipeFileName": "[parameters('test1_blob_event_properties_test1_zip_parameters_PipeFileName')]"
+						}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/zmy02-zipped/blobs/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('test1_blob_event_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trgeventnew')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Trg Pipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"FileName": "[parameters('trgeventnew_properties_Trg Pipeline_parameters_FileName')]"
+						}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/trginput/blobs/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('trgeventnew_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_tumbling_window')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pl_copy_circuits",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"p_window_end_date": "[parameters('tr_tumbling_window_properties_pipeline_parameters_p_window_end_date')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 24,
+					"startTime": "2022-07-01T22:00:00Z",
+					"endTime": "2022-07-05T22:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 1,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

@@ -1,0 +1,909 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "bajlecadf"
+		},
+		"Inputblob_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Inputblob'"
+		},
+		"LNK_DataLakeGen2_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LNK_DataLakeGen2'"
+		},
+		"Outputsql_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Outputsql'"
+		},
+		"lnk_sqldatabase_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'lnk_sqldatabase'"
+		},
+		"lnk_storage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'lnk_storage'"
+		},
+		"testcreditsafe_sftp_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'testcreditsafe_sftp'"
+		},
+		"LNK_DataLakeGen2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://bajlecblob.dfs.core.windows.net"
+		},
+		"lnk_restapi_example_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "http://dummy.restapiexample.com/api/v1/employees"
+		},
+		"lnk_restapi_example_param_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{concat('http://dummy.restapiexample.com/api/v1/', linkedService().ln_fname)}"
+		},
+		"testcreditsafe_sftp_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "mft.filegateway.creditsafe.com"
+		},
+		"testcreditsafe_sftp_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "101159964_ext"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Inputblob')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('Inputblob_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LNK_DataLakeGen2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LNK_DataLakeGen2_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('LNK_DataLakeGen2_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Outputsql')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('Outputsql_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/lnk_restapi_example')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('lnk_restapi_example_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/lnk_restapi_example_param')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"ln_fname": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('lnk_restapi_example_param_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/lnk_sqldatabase')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('lnk_sqldatabase_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/lnk_storage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('lnk_storage_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/testcreditsafe_sftp')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Sftp",
+				"typeProperties": {
+					"host": "[parameters('testcreditsafe_sftp_properties_typeProperties_host')]",
+					"port": 22,
+					"skipHostKeyValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('testcreditsafe_sftp_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('testcreditsafe_sftp_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/onprem')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PIP_StagingToFinal')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LoadDimCustomer",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[staging].[usp_LoadDimCustomer]"
+						},
+						"linkedServiceName": {
+							"referenceName": "lnk_sqldatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "LoadDimProduct",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[staging].[usp_LoadDimProduct]"
+						},
+						"linkedServiceName": {
+							"referenceName": "lnk_sqldatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "LoadFactSales",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "LoadDimCustomer",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "LoadDimProduct",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[staging].[usp_LoadFactSales]"
+						},
+						"linkedServiceName": {
+							"referenceName": "lnk_sqldatabase",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "bidesign"
+				},
+				"annotations": [],
+				"lastPublishTime": "2020-09-23T08:48:21Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lnk_sqldatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CarsCSV')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Inputblob",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "zmy00_Misc"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "cars.csv",
+						"container": "input"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Make",
+						"type": "String"
+					},
+					{
+						"name": "Model",
+						"type": "String"
+					},
+					{
+						"name": "Type",
+						"type": "String"
+					},
+					{
+						"name": "Origin",
+						"type": "String"
+					},
+					{
+						"name": "DriveTrain",
+						"type": "String"
+					},
+					{
+						"name": "Length",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Inputblob')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CarsTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Outputsql",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "zmy00_Misc"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Make",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Model",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Origin",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DriveTrain",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Length",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Cars"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Outputsql')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Blob')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lnk_storage",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "bidesign"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "bidesign"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lnk_storage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DataLakeGen2_Cars')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LNK_DataLakeGen2",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "zmy00_Misc"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "test-output"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LNK_DataLakeGen2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Db_Dynamic')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lnk_sqldatabase",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"SchemaName": {
+						"type": "string"
+					},
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "bidesign"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().SchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lnk_sqldatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Db_FactSales2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lnk_sqldatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "bidesign"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SalesKey",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TransactionId",
+						"type": "varchar"
+					},
+					{
+						"name": "ProductKey",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CustomerKey",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "InsertTime",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "InsertUser",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LastUpdateTime",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "LastUpdateUser",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "FactSales2"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lnk_sqldatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Db_Static')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lnk_sqldatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "bidesign"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lnk_sqldatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_InputCSV')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lnk_storage",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "zmy03_bigfile"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "filesbig.csv",
+						"container": "zmy03-bigfile"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "GroupCode",
+						"type": "String"
+					},
+					{
+						"name": "CorporateCode",
+						"type": "String"
+					},
+					{
+						"name": "AccountNo",
+						"type": "String"
+					},
+					{
+						"name": "AgreementNo",
+						"type": "String"
+					},
+					{
+						"name": "SubscriptionNumber",
+						"type": "String"
+					},
+					{
+						"name": "CostCentre",
+						"type": "String"
+					},
+					{
+						"name": "NetworkSerialNumber",
+						"type": "String"
+					},
+					{
+						"name": "Tariff",
+						"type": "String"
+					},
+					{
+						"name": "Callclass",
+						"type": "String"
+					},
+					{
+						"name": "CallclassDescription",
+						"type": "String"
+					},
+					{
+						"name": "CallLandingdate",
+						"type": "String"
+					},
+					{
+						"name": "Calldate",
+						"type": "String"
+					},
+					{
+						"name": "Calltime",
+						"type": "String"
+					},
+					{
+						"name": "BundledCall",
+						"type": "String"
+					},
+					{
+						"name": "SPBilledCallPrice",
+						"type": "String"
+					},
+					{
+						"name": "Service",
+						"type": "String"
+					},
+					{
+						"name": "PreBundleActualDuration",
+						"type": "String"
+					},
+					{
+						"name": "PreBundledSPValue",
+						"type": "String"
+					},
+					{
+						"name": "SPRetailCallPrice",
+						"type": "String"
+					},
+					{
+						"name": "DiscountValue",
+						"type": "String"
+					},
+					{
+						"name": "SCDCountryofCallOrigin",
+						"type": "String"
+					},
+					{
+						"name": "SCDCallDirection",
+						"type": "String"
+					},
+					{
+						"name": "SCDNetworksCallIndicator",
+						"type": "String"
+					},
+					{
+						"name": "GPRSDestination",
+						"type": "String"
+					},
+					{
+						"name": "GPRSProductCode",
+						"type": "String"
+					},
+					{
+						"name": "UplinkVolume",
+						"type": "String"
+					},
+					{
+						"name": "DownlinkVolume",
+						"type": "String"
+					},
+					{
+						"name": "NumberofContexts",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lnk_storage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_OutputSQL')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lnk_sqldatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "zmy03_bigfile"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "GroupCode",
+						"type": "varchar"
+					},
+					{
+						"name": "CorporateCode",
+						"type": "varchar"
+					},
+					{
+						"name": "AccountNo",
+						"type": "varchar"
+					},
+					{
+						"name": "AgreementNo",
+						"type": "varchar"
+					},
+					{
+						"name": "SubscriptionNumber",
+						"type": "varchar"
+					},
+					{
+						"name": "CostCentre",
+						"type": "varchar"
+					},
+					{
+						"name": "NetworkSerialNumber",
+						"type": "varchar"
+					},
+					{
+						"name": "Tariff",
+						"type": "varchar"
+					},
+					{
+						"name": "CallClass",
+						"type": "varchar"
+					},
+					{
+						"name": "CallClassDescription",
+						"type": "varchar"
+					},
+					{
+						"name": "CallLandingDate",
+						"type": "varchar"
+					},
+					{
+						"name": "Calldate",
+						"type": "varchar"
+					},
+					{
+						"name": "Calltime",
+						"type": "varchar"
+					},
+					{
+						"name": "BundledCall",
+						"type": "varchar"
+					},
+					{
+						"name": "SPBilledCallPrice",
+						"type": "varchar"
+					},
+					{
+						"name": "Service",
+						"type": "varchar"
+					},
+					{
+						"name": "PreBundleActualDuration",
+						"type": "varchar"
+					},
+					{
+						"name": "PreBundledSPValue",
+						"type": "varchar"
+					},
+					{
+						"name": "SPRetailCallPrice",
+						"type": "varchar"
+					},
+					{
+						"name": "DiscountValue",
+						"type": "varchar"
+					},
+					{
+						"name": "SCDCountryOfCallOrigin",
+						"type": "varchar"
+					},
+					{
+						"name": "SCDCallDirection",
+						"type": "varchar"
+					},
+					{
+						"name": "SCDNetworksCallIndicator",
+						"type": "varchar"
+					},
+					{
+						"name": "GPRSDestination",
+						"type": "varchar"
+					},
+					{
+						"name": "GPRSProductCode",
+						"type": "varchar"
+					},
+					{
+						"name": "UplinkVolume",
+						"type": "varchar"
+					},
+					{
+						"name": "DownlinkVolume",
+						"type": "varchar"
+					},
+					{
+						"name": "NumberOfContexts",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "zmy03_bigfile"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lnk_sqldatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_cars_view')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lnk_sqldatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "zmy00_Misc"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Make",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Model",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Origin",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DriveTrain",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Length",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "cars_view"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lnk_sqldatabase')]"
+			]
+		}
+	]
+}
