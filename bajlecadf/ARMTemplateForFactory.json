@@ -7399,7 +7399,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_bajlecblob_src_circuits')]",
+			"name": "[concat(parameters('factoryName'), '/ds_ablob_bajlecblob_src')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -7431,7 +7431,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_bajlecblob_tgt_circuits')]",
+			"name": "[concat(parameters('factoryName'), '/ds_ablob_bajlecblob_tgt')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -7460,6 +7460,7 @@
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
+					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": []
@@ -7521,14 +7522,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ds_bajlecblob_src_circuits",
+								"referenceName": "ds_ablob_bajlecblob_src",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_bajlecblob_tgt_circuits",
+								"referenceName": "ds_ablob_bajlecblob_tgt",
 								"type": "DatasetReference",
 								"parameters": {
 									"p_window_end_date": {
@@ -7555,8 +7556,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_bajlecblob_src_circuits')]",
-				"[concat(variables('factoryId'), '/datasets/ds_bajlecblob_tgt_circuits')]"
+				"[concat(variables('factoryId'), '/datasets/ds_ablob_bajlecblob_src')]",
+				"[concat(variables('factoryId'), '/datasets/ds_ablob_bajlecblob_tgt')]"
 			]
 		},
 		{

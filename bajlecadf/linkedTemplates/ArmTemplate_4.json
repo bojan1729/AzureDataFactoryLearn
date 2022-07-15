@@ -933,14 +933,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ds_bajlecblob_src_circuits",
+								"referenceName": "ds_ablob_bajlecblob_src",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_bajlecblob_tgt_circuits",
+								"referenceName": "ds_ablob_bajlecblob_tgt",
 								"type": "DatasetReference",
 								"parameters": {
 									"p_window_end_date": {

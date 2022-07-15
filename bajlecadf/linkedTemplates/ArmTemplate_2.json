@@ -598,7 +598,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_bajlecblob_src_circuits')]",
+			"name": "[concat(parameters('factoryName'), '/ds_ablob_bajlecblob_src')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
