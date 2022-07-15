@@ -71,9 +71,9 @@
 			"type": "string",
 			"defaultValue": "/subscriptions/efa5efce-52f7-4c29-b118-ae4dff4cac2a/resourceGroups/bajlec-datafactory/providers/Microsoft.Storage/storageAccounts/bajlecblob"
 		},
-		"tr_tumbling_window_properties_pipeline_parameters_p_window_end_date": {
+		"tr_tumbling_window2_properties_pipeline_parameters_p_window_end_date": {
 			"type": "string",
-			"defaultValue": "@trigger().output.EndTime"
+			"defaultValue": "@trigger().outputs.windowEndTime"
 		},
 		"containerUri": {
 			"type": "string",
@@ -248,8 +248,8 @@
 					"trgeventnew_properties_typeProperties_scope": {
 						"value": "[parameters('trgeventnew_properties_typeProperties_scope')]"
 					},
-					"tr_tumbling_window_properties_pipeline_parameters_p_window_end_date": {
-						"value": "[parameters('tr_tumbling_window_properties_pipeline_parameters_p_window_end_date')]"
+					"tr_tumbling_window2_properties_pipeline_parameters_p_window_end_date": {
+						"value": "[parameters('tr_tumbling_window2_properties_pipeline_parameters_p_window_end_date')]"
 					}
 				}
 			},
