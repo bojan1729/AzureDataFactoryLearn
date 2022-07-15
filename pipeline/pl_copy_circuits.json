@@ -1,0 +1,9 @@
+{
+	"name": "pl_copy_circuits",
+	"properties": {
+		"folder": {
+			"name": "tumblingwindow"
+		},
+		"annotations": []
+	}
+}
