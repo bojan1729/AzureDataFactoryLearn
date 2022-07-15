@@ -1,0 +1,27 @@
+{
+	"name": "ds_bajlecblob_src_circuits",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Inputblob",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "tumblingwindow"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "circuits.csv",
+				"folderPath": "src",
+				"container": "tumblingwindow"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
