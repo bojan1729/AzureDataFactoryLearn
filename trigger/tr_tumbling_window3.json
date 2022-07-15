@@ -2,7 +2,16 @@
 	"name": "tr_tumbling_window3",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
+		"pipeline": {
+			"pipelineReference": {
+				"referenceName": "pl_copy_circuits",
+				"type": "PipelineReference"
+			},
+			"parameters": {
+				"p_window_end_date": "@trigger().outputs.windowEndTime"
+			}
+		},
 		"type": "TumblingWindowTrigger",
 		"typeProperties": {
 			"frequency": "Hour",
