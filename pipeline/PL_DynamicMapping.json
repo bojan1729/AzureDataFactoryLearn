@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Column Mapping",
+				"name": "GetColumnMapping",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -37,6 +37,63 @@
 					},
 					"firstRowOnly": true
 				}
+			},
+			{
+				"name": "Copy data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "GetColumnMapping",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"value": "@json(activity('GetColumnMapping').output.firstRow.json_output)",
+						"type": "Expression"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_sqldb_src",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "dbo",
+							"TableName": "DimProduct"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_sqldb_tgt",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "dbo",
+							"TableName": "DimProduct"
+						}
+					}
+				]
 			}
 		],
 		"folder": {
