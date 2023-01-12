@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "GetColumnMapping",
+				"name": "Get column mapping",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -43,7 +43,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "GetColumnMapping",
+						"activity": "Get column mapping",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -78,7 +78,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DS_sqldb_src",
+						"referenceName": "DS_sqldb",
 						"type": "DatasetReference",
 						"parameters": {
 							"SchemaName": "dbo",
