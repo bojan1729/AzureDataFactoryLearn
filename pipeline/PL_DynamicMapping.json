@@ -1,0 +1,9 @@
+{
+	"name": "PL_DynamicMapping",
+	"properties": {
+		"folder": {
+			"name": "dynamic_mapping"
+		},
+		"annotations": []
+	}
+}
