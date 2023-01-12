@@ -21,11 +21,17 @@
 						"storedProcedureParameters": {
 							"schema_name": {
 								"type": "String",
-								"value": "dbo"
+								"value": {
+									"value": "@pipeline().parameters.Schema",
+									"type": "Expression"
+								}
 							},
 							"table_name": {
 								"type": "String",
-								"value": "DimCustomer"
+								"value": {
+									"value": "@pipeline().parameters.Table",
+									"type": "Expression"
+								}
 							}
 						},
 						"queryTimeout": "02:00:00",
@@ -83,8 +89,14 @@
 						"referenceName": "DS_sqldb",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "dbo",
-							"TableName": "DimCustomer"
+							"SchemaName": {
+								"value": "@pipeline().parameters.Schema",
+								"type": "Expression"
+							},
+							"TableName": {
+								"value": "@pipeline().parameters.Table",
+								"type": "Expression"
+							}
 						}
 					}
 				],
@@ -93,13 +105,29 @@
 						"referenceName": "DS_sqldb",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "dbo",
-							"TableName": "tgt_DimCustomer"
+							"SchemaName": {
+								"value": "@pipeline().parameters.Schema",
+								"type": "Expression"
+							},
+							"TableName": {
+								"value": "@concat('tgt_', pipeline().parameters.Table)",
+								"type": "Expression"
+							}
 						}
 					}
 				]
 			}
 		],
+		"parameters": {
+			"Schema": {
+				"type": "string",
+				"defaultValue": "dbo"
+			},
+			"Table": {
+				"type": "string",
+				"defaultValue": "DimProduct"
+			}
+		},
 		"folder": {
 			"name": "dynamic_mapping"
 		},
