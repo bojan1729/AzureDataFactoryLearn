@@ -25,7 +25,7 @@
 							},
 							"table_name": {
 								"type": "String",
-								"value": "DimProduct"
+								"value": "DimCustomer"
 							}
 						},
 						"queryTimeout": "02:00:00",
