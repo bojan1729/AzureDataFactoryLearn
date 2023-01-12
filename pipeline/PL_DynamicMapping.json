@@ -1,6 +1,44 @@
 {
 	"name": "PL_DynamicMapping",
 	"properties": {
+		"activities": [
+			{
+				"name": "Get Column Mapping",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dbo].[usp_getColumnMapping]",
+						"storedProcedureParameters": {
+							"schema_name": {
+								"type": "String",
+								"value": "dbo"
+							},
+							"table_name": {
+								"type": "String",
+								"value": "DimProduct"
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_sqldb",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			}
+		],
 		"folder": {
 			"name": "dynamic_mapping"
 		},
