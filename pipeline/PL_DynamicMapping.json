@@ -33,7 +33,11 @@
 					},
 					"dataset": {
 						"referenceName": "DS_sqldb",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "dummy",
+							"TableName": "dummy"
+						}
 					},
 					"firstRowOnly": true
 				}
