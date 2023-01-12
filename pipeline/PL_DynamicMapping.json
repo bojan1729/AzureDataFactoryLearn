@@ -65,14 +65,13 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "truncate table dbo.DimProduct;",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
 					"translator": {
-						"value": "@json(activity('GetColumnMapping').output.firstRow.json_output)",
+						"value": "@json(activity('Get column mapping').output.firstRow.json_output)",
 						"type": "Expression"
 					}
 				},
@@ -88,11 +87,11 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_sqldb_tgt",
+						"referenceName": "DS_sqldb",
 						"type": "DatasetReference",
 						"parameters": {
 							"SchemaName": "dbo",
-							"TableName": "DimProduct"
+							"TableName": "tgt_DimProduct"
 						}
 					}
 				]
