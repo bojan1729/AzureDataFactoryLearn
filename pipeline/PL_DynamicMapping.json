@@ -84,7 +84,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"SchemaName": "dbo",
-							"TableName": "DimProduct"
+							"TableName": "DimCustomer"
 						}
 					}
 				],
@@ -94,7 +94,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"SchemaName": "dbo",
-							"TableName": "tgt_DimProduct"
+							"TableName": "tgt_DimCustomer"
 						}
 					}
 				]
