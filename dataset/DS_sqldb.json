@@ -1,5 +1,5 @@
 {
-	"name": "DS_sqldb_src",
+	"name": "DS_sqldb",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "lnk_sqldatabase",
