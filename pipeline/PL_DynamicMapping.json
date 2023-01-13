@@ -76,7 +76,7 @@
 					"sink": {
 						"type": "AzureSqlSink",
 						"preCopyScript": {
-							"value": "truncate table @{pipeline().parameters.Schema}.@{concat('tgt_', pipeline().parameters.Table)};",
+							"value": "truncate table @{pipeline().parameters.SchemaName}.@{concat('tgt', pipeline().parameters.TableName)};",
 							"type": "Expression"
 						},
 						"writeBehavior": "insert",
@@ -95,11 +95,11 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"SchemaName": {
-								"value": "@pipeline().parameters.Schema",
+								"value": "@pipeline().parameters.SchemaName",
 								"type": "Expression"
 							},
 							"TableName": {
-								"value": "@pipeline().parameters.Table",
+								"value": "@pipeline().parameters.TableName",
 								"type": "Expression"
 							}
 						}
@@ -111,11 +111,11 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"SchemaName": {
-								"value": "@pipeline().parameters.Schema",
+								"value": "@pipeline().parameters.SchemaName",
 								"type": "Expression"
 							},
 							"TableName": {
-								"value": "@concat('tgt_', pipeline().parameters.Table)",
+								"value": "@concat('tgt', pipeline().parameters.TableName)",
 								"type": "Expression"
 							}
 						}
