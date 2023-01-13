@@ -42,8 +42,14 @@
 						"referenceName": "DS_sqldb",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "dymap",
-							"TableName": "Product"
+							"SchemaName": {
+								"value": "@pipeline().parameters.SchemaName",
+								"type": "Expression"
+							},
+							"TableName": {
+								"value": "@pipeline().parameters.TableName",
+								"type": "Expression"
+							}
 						}
 					}
 				],
