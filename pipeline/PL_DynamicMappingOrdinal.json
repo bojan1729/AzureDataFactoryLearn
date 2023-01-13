@@ -17,21 +17,15 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderStoredProcedureName": "[dymap].[usp_getColumnMapping]",
+						"sqlReaderStoredProcedureName": "[dymap].[usp_getColumnMappingOrdinal]",
 						"storedProcedureParameters": {
 							"schema_name": {
 								"type": "String",
-								"value": {
-									"value": "@pipeline().parameters.SchemaName",
-									"type": "Expression"
-								}
+								"value": "dymap"
 							},
 							"table_name": {
 								"type": "String",
-								"value": {
-									"value": "@pipeline().parameters.TableName",
-									"type": "Expression"
-								}
+								"value": "Sales"
 							}
 						},
 						"queryTimeout": "02:00:00",
@@ -51,14 +45,7 @@
 			{
 				"name": "Copy data",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Get column mapping",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
