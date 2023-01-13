@@ -1,0 +1,22 @@
+{
+	"name": "DS_storage_constructors",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_storage",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "dynamic_mapping"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Constructors.json",
+				"container": "dymap"
+			}
+		},
+		"schema": {}
+	}
+}
