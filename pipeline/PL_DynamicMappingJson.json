@@ -1,0 +1,121 @@
+{
+	"name": "PL_DynamicMappingJson",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get column mapping",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dymap].[usp_getColumnMappingOrdinal]",
+						"storedProcedureParameters": {
+							"schema_name": {
+								"type": "String",
+								"value": "dymap"
+							},
+							"table_name": {
+								"type": "String",
+								"value": "Sales"
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_sqldb",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "dummy",
+							"TableName": "dummy"
+						}
+					},
+					"firstRowOnly": true
+				}
+			},
+			{
+				"name": "Copy data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Get column mapping",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": {
+							"value": "truncate table dymap.tgtSales;",
+							"type": "Expression"
+						},
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"value": "@json(activity('Get column mapping').output.firstRow.json_output)",
+						"type": "Expression"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_storage_sales",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_sqldb",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": {
+								"value": "dymap",
+								"type": "Expression"
+							},
+							"TableName": {
+								"value": "tgtSales",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "dynamic_mapping"
+		},
+		"annotations": []
+	}
+}
