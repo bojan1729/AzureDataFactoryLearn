@@ -1,0 +1,141 @@
+{
+	"name": "PL_DynamicMappingOrdinal",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get column mapping",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dymap].[usp_getColumnMapping]",
+						"storedProcedureParameters": {
+							"schema_name": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.SchemaName",
+									"type": "Expression"
+								}
+							},
+							"table_name": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.TableName",
+									"type": "Expression"
+								}
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_sqldb",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "dummy",
+							"TableName": "dummy"
+						}
+					},
+					"firstRowOnly": true
+				}
+			},
+			{
+				"name": "Copy data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Get column mapping",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": {
+							"value": "truncate table @{pipeline().parameters.SchemaName}.@{concat('tgt', pipeline().parameters.TableName)};",
+							"type": "Expression"
+						},
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"value": "@json(activity('Get column mapping').output.firstRow.json_output)",
+						"type": "Expression"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_sqldb",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": {
+								"value": "@pipeline().parameters.SchemaName",
+								"type": "Expression"
+							},
+							"TableName": {
+								"value": "@pipeline().parameters.TableName",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_sqldb",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": {
+								"value": "@pipeline().parameters.SchemaName",
+								"type": "Expression"
+							},
+							"TableName": {
+								"value": "@concat('tgt', pipeline().parameters.TableName)",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"SchemaName": {
+				"type": "string",
+				"defaultValue": "dymap"
+			},
+			"TableName": {
+				"type": "string",
+				"defaultValue": "Product"
+			}
+		},
+		"folder": {
+			"name": "dynamic_mapping"
+		},
+		"annotations": []
+	}
+}
