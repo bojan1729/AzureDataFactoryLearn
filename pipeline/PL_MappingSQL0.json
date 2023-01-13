@@ -59,6 +59,16 @@
 				]
 			}
 		],
+		"parameters": {
+			"SchemaName": {
+				"type": "string",
+				"defaultValue": "dymap"
+			},
+			"TableName": {
+				"type": "string",
+				"defaultValue": "tgtProduct0"
+			}
+		},
 		"folder": {
 			"name": "dynamic_mapping"
 		},
