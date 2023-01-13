@@ -22,29 +22,26 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": {
-							"value": "truncate table dymap.tgtProduct0;",
-							"type": "Expression"
-						},
 						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false,
-						"disableMetricsCollection": false
+						"sqlWriterUseTableLock": false
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
 				},
 				"inputs": [
 					{
 						"referenceName": "DS_sqldb",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": {
-								"value": "dymap",
-								"type": "Expression"
-							},
-							"TableName": {
-								"value": "Product",
-								"type": "Expression"
-							}
+							"SchemaName": "dymap",
+							"TableName": "Product"
 						}
 					}
 				],
@@ -53,14 +50,8 @@
 						"referenceName": "DS_sqldb",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": {
-								"value": "dymap",
-								"type": "Expression"
-							},
-							"TableName": {
-								"value": "tgtProduct0",
-								"type": "Expression"
-							}
+							"SchemaName": "dymap",
+							"TableName": "tgtProduct0"
 						}
 					}
 				]
