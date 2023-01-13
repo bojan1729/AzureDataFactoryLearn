@@ -91,7 +91,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DS_storage",
+						"referenceName": "DS_storage_sales",
 						"type": "DatasetReference"
 					}
 				],
