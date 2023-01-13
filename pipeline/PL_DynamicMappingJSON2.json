@@ -19,6 +19,10 @@
 						"type": "AzureSqlSource",
 						"sqlReaderStoredProcedureName": "[dymap].[usp_getColumnMappingJson2]",
 						"storedProcedureParameters": {
+							"collection_reference": {
+								"type": "String",
+								"value": "data"
+							},
 							"schema_name": {
 								"type": "String",
 								"value": "dymap"
