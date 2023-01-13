@@ -37,41 +37,42 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['constructor_id']"
+									"path": "$['data'][0]['id']"
 								},
 								"sink": {
-									"name": "ConstructorId",
+									"name": "EmployeeId",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['data'][0]['employee_name']"
+								},
+								"sink": {
+									"name": "EmployeeName",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"path": "$['constructor_ref']"
+									"path": "$['data'][0]['employee_salary']"
 								},
 								"sink": {
-									"name": "ConstructorRef",
-									"type": "String"
+									"name": "EmployeeSalary",
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
-									"path": "$['name']"
+									"path": "$['data'][0]['employee_age']"
 								},
 								"sink": {
-									"name": "ConstructorName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "$['nationality']"
-								},
-								"sink": {
-									"name": "ConstructorNationality",
-									"type": "String"
+									"name": "EmployeeAge",
+									"type": "Int32"
 								}
 							}
-						]
+						],
+						"collectionReference": ""
 					}
 				},
 				"inputs": [
@@ -86,7 +87,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"SchemaName": "dymap",
-							"TableName": "tgtConstructors"
+							"TableName": "tgtEmployees"
 						}
 					}
 				]
