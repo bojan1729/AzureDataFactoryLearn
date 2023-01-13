@@ -1,0 +1,25 @@
+{
+	"name": "DS_storage",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_storage",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "dynamic_mapping"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Sales.csv",
+				"container": "dymap"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
