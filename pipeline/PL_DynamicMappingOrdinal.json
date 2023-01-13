@@ -76,7 +76,7 @@
 					"sink": {
 						"type": "AzureSqlSink",
 						"preCopyScript": {
-							"value": "truncate table @{pipeline().parameters.SchemaName}.@{concat('tgt', pipeline().parameters.TableName)};",
+							"value": "truncate table dymap.tgtSales;",
 							"type": "Expression"
 						},
 						"writeBehavior": "insert",
@@ -101,11 +101,11 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"SchemaName": {
-								"value": "@pipeline().parameters.SchemaName",
+								"value": "dymap",
 								"type": "Expression"
 							},
 							"TableName": {
-								"value": "@concat('tgt', pipeline().parameters.TableName)",
+								"value": "tgtSales",
 								"type": "Expression"
 							}
 						}
