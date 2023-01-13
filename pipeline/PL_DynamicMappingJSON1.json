@@ -17,8 +17,12 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderStoredProcedureName": "[dymap].[usp_getColumnMappingJson1]",
+						"sqlReaderStoredProcedureName": "[dymap].[usp_getColumnMappingJson2]",
 						"storedProcedureParameters": {
+							"collection_reference": {
+								"type": "String",
+								"value": null
+							},
 							"schema_name": {
 								"type": "String",
 								"value": "dymap"
