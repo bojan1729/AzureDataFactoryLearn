@@ -1,6 +1,97 @@
 {
 	"name": "PL_JSON",
 	"properties": {
+		"activities": [
+			{
+				"name": "Copy data",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['constructor_id']"
+								},
+								"sink": {
+									"name": "ConstructorId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['constructor_ref']"
+								},
+								"sink": {
+									"name": "ConstructorRef",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['name']"
+								},
+								"sink": {
+									"name": "ConstructorName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['nationality']"
+								},
+								"sink": {
+									"name": "ConstructorNationality",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_storage_constructors",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_sqldb",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "dymap",
+							"TableName": "tgtConstructors"
+						}
+					}
+				]
+			}
+		],
 		"folder": {
 			"name": "dynamic_mapping"
 		},
