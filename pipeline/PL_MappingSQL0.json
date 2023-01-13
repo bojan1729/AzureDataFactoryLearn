@@ -77,7 +77,7 @@
 			},
 			"TableName": {
 				"type": "string",
-				"defaultValue": "tgtProduct0"
+				"defaultValue": "Product"
 			}
 		},
 		"folder": {
