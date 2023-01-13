@@ -1,5 +1,5 @@
 {
-	"name": "DS_storage",
+	"name": "DS_storage_sales",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "lnk_storage",
