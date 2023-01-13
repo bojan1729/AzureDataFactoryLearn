@@ -22,7 +22,6 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "truncate table dymap.tgtProduct0;",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
@@ -58,8 +57,14 @@
 						"referenceName": "DS_sqldb",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "dymap",
-							"TableName": "tgtProduct0"
+							"SchemaName": {
+								"value": "@pipeline().parameters.SchemaName",
+								"type": "Expression"
+							},
+							"TableName": {
+								"value": "@concat('tgt', pipeline().parameters.TableName, '0')",
+								"type": "Expression"
+							}
 						}
 					}
 				]
