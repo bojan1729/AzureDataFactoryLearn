@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderStoredProcedureName": "[dymap].[usp_getColumnMappingOrdinal]",
+						"sqlReaderStoredProcedureName": "[dymap].[usp_getColumnMappingJson]",
 						"storedProcedureParameters": {
 							"schema_name": {
 								"type": "String",
@@ -25,7 +25,7 @@
 							},
 							"table_name": {
 								"type": "String",
-								"value": "Sales"
+								"value": "Constructors"
 							}
 						},
 						"queryTimeout": "02:00:00",
