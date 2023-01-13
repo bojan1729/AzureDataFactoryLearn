@@ -1,0 +1,74 @@
+{
+	"name": "PL_Mapping0",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": {
+							"value": "truncate table dymap.tgtProduct0;",
+							"type": "Expression"
+						},
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_sqldb",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": {
+								"value": "dymap",
+								"type": "Expression"
+							},
+							"TableName": {
+								"value": "Product",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_sqldb",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": {
+								"value": "dymap",
+								"type": "Expression"
+							},
+							"TableName": {
+								"value": "tgtProduct0",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "dynamic_mapping"
+		},
+		"annotations": []
+	}
+}
