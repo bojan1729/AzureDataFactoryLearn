@@ -1,5 +1,5 @@
 {
-	"name": "PL_DynamicMappingJSON1",
+	"name": "PL5_Dynamic_Mapping_Json_Single_Line",
 	"properties": {
 		"activities": [
 			{
@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderStoredProcedureName": "[dymap].[usp_getColumnMappingJson1]",
+						"sqlReaderStoredProcedureName": "[dymap].[usp_getColumnMappingJsonSingleLine]",
 						"storedProcedureParameters": {
 							"schema_name": {
 								"type": "String",
