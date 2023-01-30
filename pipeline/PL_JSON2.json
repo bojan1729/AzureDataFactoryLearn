@@ -83,7 +83,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_sqldb",
+						"referenceName": "DS_sqldatabase",
 						"type": "DatasetReference",
 						"parameters": {
 							"SchemaName": "dymap",
