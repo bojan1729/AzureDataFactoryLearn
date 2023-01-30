@@ -62,7 +62,7 @@
 								"type": "Expression"
 							},
 							"TableName": {
-								"value": "@concat('tgt', pipeline().parameters.TableName, '0')",
+								"value": "@concat('stg', pipeline().parameters.TableName)",
 								"type": "Expression"
 							}
 						}
