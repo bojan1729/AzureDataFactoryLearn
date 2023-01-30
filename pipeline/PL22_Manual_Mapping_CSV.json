@@ -47,7 +47,8 @@
 								},
 								"sink": {
 									"name": "TransactionId",
-									"type": "String"
+									"type": "String",
+									"physicalType": "varchar"
 								}
 							},
 							{
@@ -57,7 +58,8 @@
 								},
 								"sink": {
 									"name": "ProductId",
-									"type": "String"
+									"type": "String",
+									"physicalType": "varchar"
 								}
 							},
 							{
@@ -67,7 +69,8 @@
 								},
 								"sink": {
 									"name": "CustomerId",
-									"type": "String"
+									"type": "String",
+									"physicalType": "varchar"
 								}
 							},
 							{
@@ -77,10 +80,18 @@
 								},
 								"sink": {
 									"name": "Sales",
-									"type": "Decimal"
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 2,
+									"precision": 10
 								}
 							}
-						]
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
 					}
 				},
 				"inputs": [
@@ -94,14 +105,8 @@
 						"referenceName": "DS_sqldatabase",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": {
-								"value": "dymap",
-								"type": "Expression"
-							},
-							"TableName": {
-								"value": "tgtSales",
-								"type": "Expression"
-							}
+							"SchemaName": "dymap",
+							"TableName": "tgtSales"
 						}
 					}
 				]
